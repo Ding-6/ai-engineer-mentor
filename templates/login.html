@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer Mentor · 登录</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #f3f4f6;
+    --border: #d1d5db;
+    --teal: #0d9488;
+    --teal-dim: rgba(13,148,136,0.12);
+    --text: #111827;
+    --muted: #4b5563;
+    --red: #dc2626;
+  }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(57,208,192,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57,208,192,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridShift 20s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes gridShift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(40px); }
+  }
+
+  /* Glow blob */
+  .blob {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(57,208,192,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+  }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 40px;
+    width: 440px;
+    animation: slideUp 0.5s ease;
+    box-shadow: 0 0 60px rgba(57,208,192,0.06), 0 24px 48px rgba(0,0,0,0.4);
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .logo-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--teal), #2ea8b8);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span { color: var(--teal); }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 36px;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .tab-row {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+    gap: 0;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    font-weight: 500;
+    margin-bottom: -1px;
+  }
+
+  .tab.active {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  input:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px var(--teal-dim);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--teal);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Sora', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+  }
+
+  .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+
+  .error-msg {
+    color: var(--red);
+    font-size: 12px;
+    margin-top: -12px;
+    margin-bottom: 14px;
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .error-msg.show { display: block; }
+
+  .demo-hint {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .demo-hint strong { color: var(--teal); }
+</style>
+</head>
+<body>
+<div class="blob"></div>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🤖</div>
+    <div class="logo-text">AI <span>Mentor</span></div>
+  </div>
+  <div class="subtitle">// your personal engineering coach</div>
+
+  <div class="tab-row">
+    <div class="tab active" onclick="showTab('login')">登 录</div>
+    <div class="tab" onclick="showTab('register')">注 册</div>
+  </div>
+
+  <!-- Login -->
+  <div id="loginForm">
+    <label>用户名</label>
+    <input type="text" id="loginUser" placeholder="输入用户名" autocomplete="username">
+    <label>密码</label>
+    <input type="password" id="loginPass" placeholder="输入密码" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="error-msg" id="loginErr"></div>
+    <button class="btn" onclick="doLogin()">进入工作台 →</button>
+    <div class="demo-hint">演示账号：<strong>demo</strong> / <strong>demo123</strong></div>
+  </div>
+
+  <!-- Register -->
+  <div id="registerForm" style="display:none">
+    <label>用户名</label>
+    <input type="text" id="regUser" placeholder="设置用户名">
+    <label>密码</label>
+    <input type="password" id="regPass" placeholder="设置密码（6位以上）">
+    <div class="error-msg" id="regErr"></div>
+    <button class="btn" onclick="doRegister()">创建账号 →</button>
+  </div>
+</div>
+
+<script>
+function showTab(t) {
+  document.querySelectorAll('.tab').forEach((el, i) => {
+    el.classList.toggle('active', (t==='login'&&i===0)||(t==='register'&&i===1));
+  });
+  document.getElementById('loginForm').style.display = t==='login'?'block':'none';
+  document.getElementById('registerForm').style.display = t==='register'?'block':'none';
+}
+
+async function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const err = document.getElementById('loginErr');
+  err.classList.remove('show');
+  if (!u || !p) { err.textContent='请填写完整信息'; err.classList.add('show'); return; }
+  const res = await fetch('/api/login', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({username:u, password:p})
+  });
+  const data = await res.json();
+  if (data.ok) { location.href='/'; }
+  else { err.textContent = data.error || '登录失败'; err.classList.add('show'); }
+}
+
+async function doRegister() {
+  const u = document.getElementById('regUser').value.trim();
+  const p = document.getElementById('regPass').value;
+  const err = document.getElementById('regErr');
+  err.classList.remove('show');
+  if (!u || p.length < 6) { err.textContent='用户名不能为空，密码至少6位'; err.classList.add('show'); return; }
+  const res = await fetch('/api/register', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({username:u, password:p})
+  });
+  const data = await res.json();
+  if (data.ok) { showTab('login'); document.getElementById('loginUser').value=u; }
+  else { err.textContent = data.error || '注册失败'; err.classList.add('show'); }
+}
+</script>
+</body>
+</html>
